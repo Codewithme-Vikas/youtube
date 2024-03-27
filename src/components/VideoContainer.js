@@ -2,33 +2,32 @@ import React, { useEffect, useState } from 'react'
 import VideoCard from './VideoCard'
 import Shimmer from './Shimmer'
 
-import { YOUTUBE_VIDEOS_URL } from "../utlis/constant";
+import { YOUTUBE_VIDEOS_URL,YOUTUBE_CATEGORY_VIDEOS } from "../utlis/constant";
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { addVideos } from '../slices/videoListSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { addVideos, clearVideo } from '../slices/videoListSlice';
 
 const VideoContainer = () => {
 
-    const [videos, setVideos] = useState([]);
+    const { category, videos} = useSelector( store=> store.video_category );
     const dispatch = useDispatch();
 
     const [nextPageToken, setNextPageToken] = useState(null); // useful to next call API
 
 
-    async function fetchVideos() {
+    async function fetchVideos(categoryId) {
         try {
-            const APIUrl = nextPageToken ? YOUTUBE_VIDEOS_URL + "&pageToken=" + nextPageToken
-                : YOUTUBE_VIDEOS_URL;
+            // category id = 0 means --> 'All'
+            let APIUrl = categoryId === '0' || categoryId === undefined ? YOUTUBE_VIDEOS_URL : YOUTUBE_CATEGORY_VIDEOS + categoryId;
+            APIUrl = nextPageToken ? APIUrl +  "&pageToken=" + nextPageToken : APIUrl;
+            
+            // console.log( "api url is " , APIUrl );
+            
 
             const response = await fetch(APIUrl);
             const data = await response.json();
-
-            if (nextPageToken && response.ok) {
-                setVideos([...videos, ...data.items]); // Append new videos to the existing videos
-            } else {
-                setVideos(data?.items);
-            }
-            // dispatch( addVideos(data?.items) );
+           
+            dispatch( addVideos(data?.items) );
 
             setNextPageToken(data?.nextPageToken);
 
@@ -39,8 +38,9 @@ const VideoContainer = () => {
 
 
     useEffect(() => {
-        fetchVideos();
-    }, []);
+        dispatch( clearVideo() );
+        fetchVideos(category.id);
+    }, [category,dispatch]);
 
 
     useEffect(() => {

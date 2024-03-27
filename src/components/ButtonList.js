@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import Button from './Button'
 import { YOUTUBE_CATEGORYIES } from '../utlis/constant';
-import { useDispatch } from 'react-redux';
 
 
 
 const ButtonList = () => {
     const [videoCategories, setVideoCategories] = useState(['All']);
-    const dispatch = useDispatch();
 
     async function fetchCategories() {
         try {

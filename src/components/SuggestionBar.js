@@ -12,13 +12,12 @@ const SuggestionBar = ({ categoryId }) => {
 
     async function fetchVideos(categoryId) {
         try {
-            console.log( YOUTUBE_CATEGORY_VIDEOS + categoryId )
             const response = await fetch(YOUTUBE_CATEGORY_VIDEOS + categoryId);
             const data = await response.json();
 
             setSuggestionVideos(data?.items);
         } catch (error) {
-            console.log(error)
+            console.log(error,"suggestionBar component fetchVideos functions")
         }
     }
 

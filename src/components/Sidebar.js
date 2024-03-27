@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { GoHome } from "react-icons/go";
 import { SiYoutubeshorts } from "react-icons/si";
 import { MdOutlineSubscriptions } from "react-icons/md";
-import { FaArrowTrendUp, FaPodcast } from "react-icons/fa6";
+import { FaArrowTrendUp } from "react-icons/fa6";
 import { MdOutlineShoppingBag } from "react-icons/md";
 import { CgMusicNote } from "react-icons/cg";
 import { PiFilmSlateBold } from "react-icons/pi";
@@ -104,7 +104,7 @@ const Sidebar = () => {
 
 
     return (
-        <div className='py-2 shadow-lg max-h-screen overflow-y-scroll sticky '>
+        <div className='py-2 shadow-lg max-h-screen overflow-y-scroll'>
 
             {/* main links - home, shorts , Subscriptions */}
             <div className='px-5 border-b-2 py-2'>

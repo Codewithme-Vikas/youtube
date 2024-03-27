@@ -88,12 +88,12 @@ function Head() {
 
                 <div className='w-full'>
 
-                    <div className='w-full flex'>
+                    <div className='w-full flex justify-center'>
 
                         <input
                             type='text'
                             placeholder='Search'
-                            className='p-2 pl-6 rounded-l-full w-full border border-slate-500 outline-blue-500 
+                            className='p-2 pl-6 rounded-l-full w-96 focus:w-full duration-100 transition-all border border-slate-500 outline-blue-500 
                             outline-2'
                             value={searchKey}
                             onChange={(e) => setSearchKey(e.target.value)}
@@ -108,7 +108,7 @@ function Head() {
                     </div>
 
                     {
-                        showSuggestion && <div className='fixed rounded-md border border-gray-100  bg-white bg py-2 w-96'>
+                        (showSuggestion && suggestions.length > 0) && <div className='fixed rounded-md border border-gray-100  bg-white bg py-2 w-96'>
                             <ul className='m-1'>
                                 {
                                     suggestions.map((suggestion, index) => {

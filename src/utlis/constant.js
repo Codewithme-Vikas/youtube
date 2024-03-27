@@ -16,7 +16,7 @@ export const SEARCH_SUGGESTIONS_API = "http://suggestqueries.google.com/complete
 
 // export const YOUTUBE_LIVE_BROADCAST = "https://youtube.googleapis.com/youtube/v3/liveBroadcasts?part=snippet%2CcontentDetails%2Cstatistics&broadcastStatus=active&key=" + GOOGLE_API_KEY;
 
-export const YOUTUBE_CATEGORY_VIDEOS = "https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&chart=mostPopular&key=" + GOOGLE_API_KEY + "&videoCategoryId=";
+export const YOUTUBE_CATEGORY_VIDEOS = "https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&chart=mostPopular&maxResults=6&key=" + GOOGLE_API_KEY + "&videoCategoryId=";
 
 // export const YOUTUBE_REGION_CODE = "https://youtube.googleapis.com/youtube/v3/i18nRegions?part=snippet&key=" + GOOGLE_API_KEY;
 
