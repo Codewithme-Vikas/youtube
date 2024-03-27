@@ -1,53 +1,46 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from './Button'
+import { YOUTUBE_CATEGORYIES } from '../utlis/constant';
+import { useDispatch } from 'react-redux';
 
-const buttonList = [
-    {
-        name : "All",
-        link : ""
-    },
-    {
-        name : "Medidation",
-        link : ""
-    },
-    {
-        name : "Yoga",
-        link : ""
-    },
-    {
-        name : "Live",
-        link : ""
-    },
-    {
-        name : "Cricket",
-        link : ""
-    },
-    {
-        name : "News",
-        link : ""
-    },
-    {
-        name : "Songs",
-        link : ""
-    },
-    {
-        name : "Surya Namskar",
-        link : ""
-    }
-]
+
 
 const ButtonList = () => {
-  return (
-    <div className='flex gap-4'>
-        
-        {
-            buttonList.map( (button,index) =>{
-                return <Button key={index} {...button}/>
-            })
+    const [videoCategories, setVideoCategories] = useState(['All']);
+    const dispatch = useDispatch();
+
+    async function fetchCategories() {
+        try {
+            const response = await fetch(YOUTUBE_CATEGORYIES);
+            const data = await response.json();
+
+            // 'all' named category addition <-- manually
+            const all = { id: 0, snippet: { title: 'All' } };
+
+            setVideoCategories([all, ...data?.items]);
+        } catch (error) {
+            console.log(error, "error in button list componet , fetchCategories function")
         }
-        
-    </div>
-  )
+    }
+
+    
+    useEffect(() => {
+        fetchCategories();
+    }, []);
+
+    return (
+        <div className='flex gap-x-4 gap-y-2 flex-wrap'>
+
+
+
+            {
+                videoCategories.map((category) => {
+                    return <Button key={category.id} {...category} />
+                })
+            }
+
+        </div>
+    )
 }
 
 export default ButtonList

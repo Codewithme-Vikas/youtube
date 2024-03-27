@@ -68,3 +68,16 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+## Cache : search functionality
+time complexity to search in array = O(n)
+time complexity to search in Object = O(1) 
+
+array.indexOf(),array.includes()  <-- O(n)
+
+new Map(); <-- optimize method to search in Object
+
+
+ for big data handle - limit caching -  only [100]
+        - delete from top and push new obj in caching

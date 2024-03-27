@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { numberFormatter, timeDifference } from '../utlis/timeDifference';
+import { numberFormatter, timeDifference } from '../utlis/helper';
 
 
 const VideoCard = ({ id, statistics, snippet }) => {
@@ -28,7 +28,7 @@ const VideoCard = ({ id, statistics, snippet }) => {
             <div className='flex gap-2 p-1'>
 
                 <div>
-                    <img src='' alt='Acc    ount profile' />
+                    <img src='' alt='Profile Img' />
                 </div>
 
                 <div className=''>

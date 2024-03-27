@@ -4,15 +4,18 @@ import { useSearchParams } from 'react-router-dom';
 
 import { closeMenu } from '../slices/appSlice';
 
-import Comments from "./Comments";
+import Comments from "./comment/Comments";
+import LiveChat from './live/LiveChat';
 import SuggestionBar from "./SuggestionBar";
+
 import { YOUTUBE_CHANNEL_DATA, YOUTUBE_VIDEO_DATA } from '../utlis/constant';
-import { numberFormatter, timeDifference } from '../utlis/timeDifference';
+import { numberFormatter, timeDifference } from '../utlis/helper';
 
 import { AiOutlineLike } from "react-icons/ai";
 import { AiOutlineDislike } from "react-icons/ai";
 import { PiShareFatBold } from "react-icons/pi";
 import { BsThreeDots } from "react-icons/bs";
+import { clearChat } from '../slices/chatSlice';
 
 const WatchPage = () => {
     const dispatch = useDispatch();
@@ -29,7 +32,10 @@ const WatchPage = () => {
     const views = numberFormatter(videoData?.statistics?.viewCount);
     const subscriber = numberFormatter(channelData?.statistics?.subscriberCount);
     const likes = numberFormatter(videoData?.statistics?.likeCount);
-    const comments = numberFormatter(videoData?.statistics?.commentCount);
+    // const comments = numberFormatter(videoData?.statistics?.commentCount);
+
+    // categoryId <-- to fetch suggestion videos( similar videos )
+    const categoryId = videoData?.snippet?.categoryId;
 
     async function getVideoData(id) {
         try {
@@ -53,12 +59,17 @@ const WatchPage = () => {
         }
     }
 
-
-
     useEffect(() => {
+
         dispatch(closeMenu());
+
         getVideoData(id);
-    }, []);
+
+        return () => {
+            // as soon as page will be changed , the chat should be deleted!
+            dispatch(clearChat());
+        }
+    }, [id, dispatch]);
 
     useEffect(() => {
         if (videoData) {
@@ -68,7 +79,6 @@ const WatchPage = () => {
 
     return (
         <div className='w-11/12 mx-auto my-4'>
-
             <div className='flex gap-4'>
 
                 {/* video deatil and comment section/component */}
@@ -163,13 +173,15 @@ const WatchPage = () => {
                             >
                             </p>
 
+                            {videoData?.snippet?.description.length > 100 && (
+                                <button
+                                    className='hover:underline text-sm'
+                                    onClick={() => setShowDescription(!isShowDescription)}
+                                >
+                                    {isShowDescription ? "show less" : "...more"}
+                                </button>
+                            )}
 
-                            <button
-                                className='hover:underline text-sm'
-                                onClick={() => setShowDescription(!isShowDescription)}
-                            >
-                                {isShowDescription ? "show less" : "...more"}
-                            </button>
                         </div>
 
                     </div>
@@ -180,8 +192,12 @@ const WatchPage = () => {
                 </div>
 
 
-
-                <SuggestionBar />
+                {
+                    videoData && <div className='w-full'>
+                        <LiveChat />
+                        <SuggestionBar categoryId={categoryId} />
+                    </div>
+                }
 
 
             </div>

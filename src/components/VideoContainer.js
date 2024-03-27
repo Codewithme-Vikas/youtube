@@ -4,18 +4,34 @@ import Shimmer from './Shimmer'
 
 import { YOUTUBE_VIDEOS_URL } from "../utlis/constant";
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addVideos } from '../slices/videoListSlice';
 
 const VideoContainer = () => {
 
     const [videos, setVideos] = useState([]);
+    const dispatch = useDispatch();
+
+    const [nextPageToken, setNextPageToken] = useState(null); // useful to next call API
 
 
     async function fetchVideos() {
         try {
-            const response = await fetch(YOUTUBE_VIDEOS_URL);
+            const APIUrl = nextPageToken ? YOUTUBE_VIDEOS_URL + "&pageToken=" + nextPageToken
+                : YOUTUBE_VIDEOS_URL;
+
+            const response = await fetch(APIUrl);
             const data = await response.json();
-            setVideos(data.items)
-            // console.log(data.items)
+
+            if (nextPageToken && response.ok) {
+                setVideos([...videos, ...data.items]); // Append new videos to the existing videos
+            } else {
+                setVideos(data?.items);
+            }
+            // dispatch( addVideos(data?.items) );
+
+            setNextPageToken(data?.nextPageToken);
+
         } catch (error) {
             console.log(error)
         }
@@ -26,12 +42,42 @@ const VideoContainer = () => {
         fetchVideos();
     }, []);
 
+
+    useEffect(() => {
+
+        let isFetching = false; // help in debouncing
+        function handleScroll() {
+            /*
+               //document.documentElement refers to the <html> 
+               //window.innerHeight - indicates how much of the content area is currently visible in the browser window.
+               //document.documentElement.scrollTop - This retrieves the number of pixels that the document has already been scrolled vertically from the top.
+               //document.documentElement.offsetHeight: This retrieves the height of the entire document.
+           */
+            // console.log(window.innerHeight, document.documentElement.scrollTop, window.innerHeight + document.documentElement.scrollTop, document.documentElement.offsetHeight)
+            if (!isFetching &&
+                (window.innerHeight + document.documentElement.scrollTop + 30) > document.documentElement.offsetHeight  // +30 is bottom threshold
+            ) {
+                // user has scrolled to the bottom
+                isFetching = true;
+                fetchVideos().then(() => {
+                    isFetching = false
+                });
+
+            }
+        }
+
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        }
+    }, [nextPageToken]); // Trigger fetchVideos whenever nextPageToken changes -{ deep thing <-- clousre working} || as nextPageToken change , we want the callback function fetchvideo must also change (take new copy of nextPageToken )
+
     return videos.length === 0 ? <Shimmer /> : (
-        <div className='flex gap-x-4 gap-y-6 flex-wrap'>
+        <div className='flex justify-between gap-x-4 gap-y-6 flex-wrap'>
 
             {
                 videos.map(video => {
-                    return <Link to={`/watch?v=${video?.id}`} key={video?.id} className='w-[30%]'>
+                    return <Link to={`/watch?v=${video?.id}`} key={video?.id} className='w-[32%]'>
                         <VideoCard key={video?.id} {...video} />
                     </Link>
                 })

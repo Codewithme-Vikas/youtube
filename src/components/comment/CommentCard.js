@@ -1,10 +1,12 @@
+import { useState } from "react";
 
 import { AiOutlineLike } from "react-icons/ai";
 import { AiOutlineDislike } from "react-icons/ai";
-import { numberFormatter, timeDifference } from '../utlis/timeDifference';
-import { useState } from "react";
+import { numberFormatter, timeDifference } from '../../utlis/helper';
 
-const CommentCard = ({ profileWidth, authorDisplayName, authorProfileImageUrl, publishedAt, textOriginal, textDisplay, likeCount, replies }) => {
+const CommentCard = ({ profileWidth, authorDisplayName, authorProfileImageUrl, publishedAt, textDisplay, likeCount, replies }) => {
+
+    // textOriginal,
 
     const [isShow, setIsShow] = useState(false);
 

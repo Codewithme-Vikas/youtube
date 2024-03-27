@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { YOUTUBE_VIDEO_COMMENTS } from '../utlis/constant';
+import { YOUTUBE_VIDEO_COMMENTS } from '../../utlis/constant';
 
-import Shimmer from "./Shimmer"
+import Shimmer from "../Shimmer"
 import CommentCard from './CommentCard';
 
 const Comments = ({ videoId }) => {
@@ -20,7 +20,7 @@ const Comments = ({ videoId }) => {
 
     useEffect(() => {
         getComments(videoId);
-    }, []);
+    }, [videoId]);
 
     return comments.length === 0 ? <Shimmer /> : (
         <div className=''>
